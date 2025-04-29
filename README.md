@@ -41,9 +41,25 @@ A modern web application built with FastAPI, Nginx, and Docker, following best p
 
 2. Create a `.env` file in the root directory:
    ```bash
+   # Create a .env file in the root directory
    cp .env.example .env
+   
+   # Edit the .env file with your settings:
+   # DATABASE_URL=postgresql://user:password@db:5432/dbname
+   # SECRET_KEY=your-secret-key
+   # ALLOWED_ORIGINS=http://localhost:3000,https://yourdomain.com
+   # DEBUG=True  # Set to False in production
+   # API_VERSION=v1
    ```
-
+   
+   The environment variables control critical application settings like:
+   - Database connection details
+   - Security keys and tokens
+   - CORS allowed origins
+   - Debug mode
+   - API versioning
+   
+   Make sure to never commit the .env file - it's already in .gitignore.
 3. Build and start the containers:
    ```bash
    docker-compose up --build
