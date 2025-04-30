@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Use Python 3.11 slim image
 FROM python:3.11-slim
 
@@ -42,7 +41,8 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # CMD: Runs uvicorn server when container starts
 #   --host 0.0.0.0: Allows external connections
 #   --port 8000: Sets server port
-=======
+
+
 # Use Python 3.11 slim image
 FROM python:3.11-slim
 
@@ -86,5 +86,5 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # CMD: Runs uvicorn server when container starts
 #   --host 0.0.0.0: Allows external connections
 #   --port 8000: Sets server port
->>>>>>> 64af35f2cca42287f69bea8ce12068ea8dd9d1af
+
 #   --reload: Enables auto-reload on code changes (development mode) 

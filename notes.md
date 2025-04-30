@@ -16,8 +16,25 @@
   - Nginx 
   - PostgreSQL
   - Adminer
-- Nginx configuration with security best practices
-- Environment variables setup
+
+- Environment Variables (.env) Best Practices:
+  - Never commit .env files to version control
+  - Create a .env.example template with dummy values
+  - Required variables:
+    - DATABASE_URL=postgresql://user:password@host:5432/dbname
+    - SECRET_KEY=your-secure-secret-key
+    - ENVIRONMENT=development/production
+    - ALLOWED_HOSTS=localhost,example.com
+  - Use strong, unique passwords
+  - Restrict file permissions (chmod 600)
+  - Validate all env variables on startup
+  - Use type hints and validation with pydantic
+  - Keep sensitive data encrypted at rest
+
+- Nginx configuration with security best practices:
+  - SSL/TLS configuration
+  - Security headers
+  - Rate limiting
 
 ## Security Features
 - Non-root user in Docker
@@ -30,7 +47,6 @@
 1. Create a `.env` file based on `.env.example` (you'll need to create this manually with appropriate values)
 
 2. Build and start the containers:
-=======
 # Sample swagger app
 
 # FastAPI Project Setup Guide
@@ -62,4 +78,3 @@
 1. Create a `.env` file based on `.env.example` (you'll need to create this manually with appropriate values)
 
 2. Build and start the containers:
->>>>>>> 64af35f2cca42287f69bea8ce12068ea8dd9d1af
