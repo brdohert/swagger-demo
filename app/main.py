@@ -56,3 +56,14 @@ async def get_openapi_endpoint():
         description=app.description,
         routes=app.routes,
     ) 
+
+# Admin endpoints
+@app.get("/auth/admin/users")
+async def list_users():
+    # Implementation for listing all users
+    pass
+
+@app.put("/auth/admin/users/{user_id}/toggle")
+async def toggle_user_status(user_id: int):
+    # Implementation for toggling user active status
+    pass
