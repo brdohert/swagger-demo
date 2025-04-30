@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
-from . import models
-from .database import engine
-from .routes import auth
+from app.models import Base
+from app.database import engine
+from app.routes.auth import router as auth_router
 
 # Create database tables
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="FastAPI Application",
@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 # Include authentication routes
-app.include_router(auth.router, prefix="/auth", tags=["authentication"])
+app.include_router(auth_router, prefix="/auth", tags=["authentication"])
 
 @app.get("/")
 async def root():
@@ -55,7 +55,7 @@ async def get_openapi_endpoint():
         version=app.version,
         description=app.description,
         routes=app.routes,
-    ) 
+    )
 
 # Admin endpoints
 @app.get("/auth/admin/users")
