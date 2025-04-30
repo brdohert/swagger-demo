@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 class UserBase(BaseModel):
@@ -7,6 +7,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    is_admin: bool = False
 
 class User(UserBase):
     id: int
@@ -21,6 +22,8 @@ class User(UserBase):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    scopes: List[str]
 
 class TokenData(BaseModel):
-    email: Optional[str] = None 
+    email: Optional[str] = None
+    scopes: List[str] = [] 

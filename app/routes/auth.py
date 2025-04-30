@@ -1,6 +1,6 @@
 from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, status, Security
+from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
 from sqlalchemy.orm import Session
 from app.models import User
 from app.schemas import User as UserSchema, UserCreate, Token
@@ -10,7 +10,8 @@ from app.auth import (
     create_access_token,
     ACCESS_TOKEN_EXPIRE_MINUTES,
     get_current_active_user,
-    get_current_admin_user
+    get_current_admin_user,
+    SCOPES
 )
 from app.database import get_db
 
@@ -25,7 +26,8 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user.password)
     db_user = User(
         email=user.email,
-        hashed_password=hashed_password
+        hashed_password=hashed_password,
+        is_admin=user.is_admin
     )
     db.add(db_user)
     db.commit()
@@ -45,14 +47,28 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    # Determine scopes based on user role
+    scopes = ["user"]
+    if user.is_admin:
+        scopes.append("admin")
+    
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data={"sub": user.email},
+        scopes=scopes,
+        expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "scopes": scopes
+    }
 
 @router.get("/users/me", response_model=UserSchema)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+async def read_users_me(
+    security_scopes: SecurityScopes,
+    current_user: User = Security(get_current_active_user, scopes=["user"])
+):
     return current_user
 
 @router.get("/admin/users", response_model=list[UserSchema])
@@ -60,7 +76,7 @@ async def read_users(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_admin_user)
+    current_user: User = Security(get_current_active_user, scopes=["admin"])
 ):
     users = db.query(User).offset(skip).limit(limit).all()
     return users
@@ -69,7 +85,7 @@ async def read_users(
 async def toggle_user_status(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_admin_user)
+    current_user: User = Security(get_current_active_user, scopes=["admin"])
 ):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
