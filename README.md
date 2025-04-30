@@ -12,6 +12,9 @@ A modern web application built with FastAPI, Nginx, and Docker, following best p
 - Development and production environments
 - A simple example to demonstrate Swagger docs and leveraging Cursor
 
+
+
+
 ## Project Structure
 
 ```
