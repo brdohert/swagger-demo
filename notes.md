@@ -3,6 +3,9 @@
 
 # FastAPI Project Setup Guide
 
+
+## Notes here:
+
 ## Project Structure
 - FastAPI application with Swagger documentation
 - Nginx configuration with security headers 
