@@ -10,6 +10,7 @@ A modern web application built with FastAPI, Nginx, and Docker, following best p
 - Docker containerization with persistent volumes
 - Secure configuration and best practices
 - Development and production environments
+- A simple example to demonstrate Swagger docs and leveraging Cursor
 
 ## Project Structure
 
